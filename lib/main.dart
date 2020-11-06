@@ -140,6 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               height: 20,
                             ),
                             Card(
+                                elevation: 0,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(5.0),
                                   side: new BorderSide(
@@ -177,6 +178,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     height: 5,
                                   ),
                                   Card(
+                                    elevation: 0,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5.0),
                                       side: new BorderSide(
@@ -274,28 +276,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           SizedBox(
                                             height: 5,
                                           ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Amount             :  ',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
-                                              Expanded(
-                                                  child: Text(orderSnapshot
-                                                          .data['GivenAmount']
-                                                          .toString() +
-                                                      '(' +
-                                                      'Qty : ' +
-                                                      orderSnapshot
-                                                          .data['Quantity']
-                                                          .toString() +
-                                                      ')'))
-                                            ],
-                                          ),
+                                          
                                           SizedBox(
                                             height: 5,
                                           ),
@@ -345,6 +326,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                     ),
                                   ),
                                   Card(
+                                    elevation: 0,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(5.0),
                                       side: new BorderSide(
