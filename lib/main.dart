@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:uidemo/additem.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,10 +19,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(),
+      home: AddItemUi(),
     );
   }
 }
@@ -57,6 +59,8 @@ class _MyHomePageState extends State<MyHomePage> {
                         .snapshots(),
                     builder: (context, orderSnapshot) {
                       if (orderSnapshot.hasData) {
+
+                        Clipboard.setData(ClipboardData(text: 'THERRORAD'));
                         Timestamp ordertimestamp =
                             orderSnapshot.data['OrderDate'];
                         DateTime orderdate = ordertimestamp.toDate();
@@ -276,7 +280,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                           SizedBox(
                                             height: 5,
                                           ),
-                                          
+
                                           SizedBox(
                                             height: 5,
                                           ),
