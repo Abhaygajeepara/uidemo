@@ -15,21 +15,24 @@ class AddItemUi extends StatefulWidget {
 class _AddItemState extends State<AddItemUi> {
   File _image;
   List<String> _categoryList = List();
-  String _category;
   List<Color> _colorList = List();
+  List<String> _detailsList = List();
+  String _category;
+  String _details;
   String _color;
   Color pickerColor = Color(0xff443a49);
   Color currentColor = Color(0xff443a49);
 
   final _formkey = GlobalKey<FormState>();
+  final _detailskey = GlobalKey<FormState>();
   final _categorykey = GlobalKey<FormState>();
 
 
-  double sizeboxheight = 10.0;
+  double sizeboxheight = 15.0;
   double sizeboxwidth = 10.0;
 
 
-  Color buttonColor = Colors.green;
+  Color buttonColor = Color(0xff0c949b);
   Color containerColor = Colors.white;
 
   getImage(ImageSource source) async {
@@ -84,6 +87,7 @@ class _AddItemState extends State<AddItemUi> {
 
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: buttonColor,
           title: Text('AddItem'),
         ),
         body: SingleChildScrollView(
@@ -432,12 +436,104 @@ class _AddItemState extends State<AddItemUi> {
                       ),
                     ],
                   ),
+                 SizedBox(height: sizeboxheight,),
+
+                  Container(
+
+                    decoration: BoxDecoration(
+                        color: containerColor,
+                        border: Border(
+                          top: BorderSide(color: Colors.black,width: 0.1),
+                          bottom: BorderSide(color: Colors.black,width: 0.1),
+                          right: BorderSide(color: Colors.black,width: 0.1),
+                          left: BorderSide(color: Colors.black,width: 0.1),
+                        )
+                    ),
+                    height: 250,
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Column(
+                        children: [
+                          Text('Category',style: TextStyle(fontWeight: FontWeight.bold),),
+                          SizedBox(height: 5,),
+                          Form(
+                            key: _detailskey,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  flex: 4,
+                                  child: TextFormField(
+                                    decoration: inputdecoration.copyWith(labelText: 'Details',),
+                                    validator: (val) =>
+                                    val.isEmpty ? 'Enter The Details' : null,
+                                    onChanged: (val) => _details = val,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: IconButton(
+                                    icon: Icon(Icons.add),
+                                    onPressed: () {
+                                      if (_detailskey.currentState.validate()) {
+                                        setState(() {
+                                          _detailsList.add(_details);
+                                        });
+                                      }
+                                    },
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: ListView.builder(
+                                itemCount: _detailsList.length,
+                                shrinkWrap: true,
+                                itemBuilder: (BuildContext, index) {
+                                  List<String> _reverseddetailslist =
+                                  _detailsList.reversed.toList();
+                                  return ListTile(
+                                      title: Row(
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                                _reverseddetailslist[index].toString()
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: IconButton(
+                                              icon: Icon(Icons.cancel),
+                                              onPressed: (){
+
+                                                setState(() {
+
+                                                  int deleteindex = _detailsList.length-1 -index;
+
+                                                  _detailsList.removeAt(deleteindex);
+                                                });
+
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                  );
+                                }),
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                 SizedBox(height: sizeboxheight,),
                  RaisedButton(
+                   shape: StadiumBorder(),
+                   child: Text('Upload'),
+                   color: buttonColor,
                    onPressed: (){
                      if(_formkey.currentState.validate())
                        {
 
                        }
+
                    },
                  )
                 ],
