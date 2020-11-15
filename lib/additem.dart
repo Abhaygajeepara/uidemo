@@ -15,6 +15,7 @@ class AddItemUi extends StatefulWidget {
 class _AddItemState extends State<AddItemUi> {
   File _image;
   List<String> _categoryList = List();
+  List<File> _imagelist = List();
   List<Color> _colorList = List();
   List<String> _detailsList = List();
   String _category;
@@ -22,7 +23,7 @@ class _AddItemState extends State<AddItemUi> {
   String _color;
   Color pickerColor = Color(0xff443a49);
   Color currentColor = Color(0xff443a49);
-  Color ignore = Color(0xff443a49);
+
 
   final _formkey = GlobalKey<FormState>();
   final _detailskey = GlobalKey<FormState>();
@@ -71,6 +72,7 @@ class _AddItemState extends State<AddItemUi> {
 
     setState(() {
       _image = result;
+      _imagelist.add((_image));
     });
   }
   void changeColor(Color color) {
@@ -85,7 +87,7 @@ class _AddItemState extends State<AddItemUi> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-
+    // print('image = $_image');
     return Scaffold(
         appBar: AppBar(
           backgroundColor: buttonColor,
@@ -107,10 +109,63 @@ class _AddItemState extends State<AddItemUi> {
                         child: SingleChildScrollView(
                           child: Card(
                             child: Container(
-                                height: 200,
-                                child: _image == null
-                                    ? Text('Choose Image')
-                                    : FittedBox(child: Image.file(_image))),
+
+    height: 250,
+                              decoration: BoxDecoration(
+                                  color: containerColor,
+                                  border: Border(
+                                    top: BorderSide(color: Colors.black,width: 0.1),
+                                    bottom: BorderSide(color: Colors.black,width: 0.1),
+                                    right: BorderSide(color: Colors.black,width: 0.1),
+                                    left: BorderSide(color: Colors.black,width: 0.1),
+                                  )
+                              ),
+                              child: GridView.builder(
+
+                                  itemCount: _imagelist.length,
+                                    shrinkWrap: false,
+                                  gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                                  itemBuilder: (context,index){
+                                    return Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: GestureDetector(
+                                        onTap: (){
+                                          return showDialog(
+                                              context: context,
+                                              builder: (BuildContext context){
+                                                return AlertDialog(
+
+                                                  content: Image.file(
+
+                                                      _imagelist[index],
+                                                    width:100,
+                                                  ),
+                                                  actions: [
+                                                    IconButton(
+                                                      icon:Icon(Icons.delete),
+                                                      onPressed: (){
+
+                                                        setState(() {
+
+                                                          _imagelist.removeAt(index);
+                                                          Navigator.pop(context);
+                                                        });
+                                                      },
+                                                    )
+                                                  ],
+                                                );
+
+
+                                              }
+                                          );
+                                        },
+                                        child: Image.file(
+                                          _imagelist[index],
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                            ),
                           ),
                         ),
                       ),
@@ -143,6 +198,10 @@ class _AddItemState extends State<AddItemUi> {
                           )),
                     ],
                   ),
+                  SizedBox(
+                    height: 5,
+                  ),
+
                   SizedBox(
                     height: 5,
                   ),
