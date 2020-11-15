@@ -22,6 +22,7 @@ class _AddItemState extends State<AddItemUi> {
   String _color;
   Color pickerColor = Color(0xff443a49);
   Color currentColor = Color(0xff443a49);
+  Color ignore = Color(0xff443a49);
 
   final _formkey = GlobalKey<FormState>();
   final _detailskey = GlobalKey<FormState>();
