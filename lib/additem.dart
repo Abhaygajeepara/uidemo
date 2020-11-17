@@ -16,7 +16,7 @@ class _AddItemState extends State<AddItemUi> {
   File _image;
   List<String> _categoryList = List();
   List<File> _imagelist = List();
-  List<Color> _colorList = List();
+  List<String> _colorList = List();
   List<String> _detailsList = List();
   String _category;
   String _details;
@@ -41,45 +41,40 @@ class _AddItemState extends State<AddItemUi> {
     var image = await ImagePicker().getImage(
       source: source,
     );
-    File cropperFile = await ImageCropper.cropImage(
-      sourcePath: image.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio7x5,
-        CropAspectRatioPreset.ratio16x9,
-      ],
-      androidUiSettings: AndroidUiSettings(
-          toolbarTitle: 'Cropper',
-          toolbarColor: Colors.green,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false),
-      iosUiSettings: IOSUiSettings(
-        minimumAspectRatio: 1.0,
-      ),
-      maxWidth: 2180,
-      maxHeight: 1440,
+    File croppedFile = await ImageCropper.cropImage(
+        sourcePath: image.path,
+        aspectRatioPresets: [
+          CropAspectRatioPreset.square,
+          CropAspectRatioPreset.ratio3x2,
+          CropAspectRatioPreset.original,
+          CropAspectRatioPreset.ratio4x3,
+          CropAspectRatioPreset.ratio16x9
+        ],
+        androidUiSettings: AndroidUiSettings(
+            toolbarTitle: 'Cropper',
+            toolbarColor: Colors.deepOrange,
+            toolbarWidgetColor: Colors.white,
+            initAspectRatio: CropAspectRatioPreset.original,
+            lockAspectRatio: false),
+        iosUiSettings: IOSUiSettings(
+          minimumAspectRatio: 1.0,
+        )
     );
 
     var result = await FlutterImageCompress.compressAndGetFile(
+      croppedFile.path,
       image.path,
-      cropperFile.path,
       quality: 100,
     );
 
     setState(() {
-      _image = result;
+       _image = result;
       _imagelist.add((_image));
     });
   }
   void changeColor(Color color) {
     setState(() {
       pickerColor = color;
-      currentColor = pickerColor;
-
     });
 
 
@@ -328,10 +323,23 @@ class _AddItemState extends State<AddItemUi> {
                                               context: context,
                                               builder: (BuildContext context) {
                                                 return AlertDialog(
+                                                  actions: [
+                                                    RaisedButton(
+
+                                                      onPressed: ()async{
+                                                         setState(() =>  currentColor = pickerColor);
+                                                         return Navigator.pop(context);
+                                                      },
+                                                      color: buttonColor,
+                                                      shape: StadiumBorder(),
+                                                      child: Text('Got It'),
+                                                    )
+                                                  ],
                                                   titlePadding: const EdgeInsets.all(0.0),
                                                   contentPadding: const EdgeInsets.all(0.0),
                                                   content: SingleChildScrollView(
                                                     child:  ColorPicker(
+
                                                       pickerColor: currentColor,
                                                       onColorChanged: changeColor,
                                                       colorPickerWidth: 300.0,
@@ -373,10 +381,11 @@ class _AddItemState extends State<AddItemUi> {
                                         child: IconButton(
                                           icon: Icon(Icons.add),
                                           onPressed: () {
-                                          bool colorexist = _colorList.contains(currentColor);
+                                          bool colorexist = _colorList.contains(currentColor.value.toString());
                                           print(colorexist);
                                           if(colorexist == false){
-                                            _colorList.add(currentColor);
+                                            _colorList.add(currentColor.value.toString());
+                                            print(_colorList);
                                           }
 
 
@@ -392,7 +401,7 @@ class _AddItemState extends State<AddItemUi> {
                                         itemCount: _colorList.length,
                                         shrinkWrap: true,
                                         itemBuilder: (BuildContext, index) {
-                                          List<Color> _reversedcolorlist =
+                                          List<String> _reversedcolorlist =
                                           _colorList.reversed.toList();
                                           return ListTile(
                                             title: Row(
@@ -403,7 +412,7 @@ class _AddItemState extends State<AddItemUi> {
                                                     height: 30,
                                                     
                                                     decoration: BoxDecoration(
-                                                        color: _reversedcolorlist[index],
+                                                        color: Color(int.parse(_reversedcolorlist[index])),
                                                       borderRadius: BorderRadius.circular(15.0)
                                                     ),
                                                   )
